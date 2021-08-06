@@ -1,0 +1,66 @@
+---
+output: 
+  officedown::rdocx_document:
+    reference_docx: ref_docs/ref_doc_crim.docx
+    base_format: "bookdown::word_document2"
+    plots:
+      caption:
+        style: Image Caption
+        pre: 'FIGURE '
+        sep: ' '
+---
+
+```{r, include=FALSE}
+library(tidyverse)
+library(flextable)
+library(officedown)
+```
+\newpage
+
+```{r basicmodel, echo=FALSE, fig.width = 4, fig.height = 4/2.891, fig.scap= "Theoretical model of collective efficacy, the built environment, and crime.",fig.cap="Theoretical model of collective efficacy, the built environment, and crime. Tested hypotheses represented as paths H1, H2, and H3"}
+# Figure 1
+# 1376 x 476; 2.891 WtH
+knitr::include_graphics("./figure/basic_model.png")
+```
+
+\newpage
+
+
+```{r blocksample, fig.width = 6*0.828, fig.height = 6, echo=FALSE, fig.scap="Map of census blocks sampled in 2001-2003 Chicago Community Adult Health Study.",  fig.cap="Map of census blocks sampled in 2001-2003 Chicago Community Adult Health Study. Sampled blocks are filled black shapes. Neighborhood clusters are outlines"}
+# Figure 2
+# 1666 x 2011; 0.828 WtH
+knitr::include_graphics("./figure/boundary_map.png")
+```
+
+
+\newpage
+
+```{r longmodels, echo=FALSE, fig.width = 4, fig.height = 4/2.891,  fig.scap= "Longitudinal structural model.", fig.cap="Longitudinal structural model. Dashed arrow represents tested independence restriction (d-separation)"}
+# Figure 3
+# 1376 x 476; 2.891 WtH
+knitr::include_graphics("./figure/longitudinal_models.png")
+```
+
+\newpage
+
+```{r directmodels, echo=FALSE, fig.width = 4, fig.height = 4/2.891, fig.scap = "Simplified depiction of crime models.", fig.cap="Simplified depiction of crime models. Solid arrows are modeled direct effects. The dashed arrow represents unmodeled (restricted) paths"}
+# Figure 4
+# 1376 x 476; 2.891 WtH
+knitr::include_graphics("./figure/direct_models.png")
+```
+
+\newpage
+
+```{r cebemodel, echo=FALSE, fig.width = 0.742*4, fig.height = 4/2.891, fig.cap="Models of the built environment and present collective efficacy"}
+# Figure 5
+# 1021 x 476; 2.891 WtH
+knitr::include_graphics("./figure/ce_be_model.png")
+```
+
+\newpage
+
+```{r coefplot, echo=FALSE, fig.width = 6, fig.height = 6,  fig.scap = "Estimated incidence rate ratios and 95% confidence intervals for selected predictors of five crime types.", fig.cap="Estimated incidence rate ratios and 95% confidence intervals for selected predictors of five crime types. Predictors are standardized, outcomes are log-counts. Estimates significant at p < .05 are in black"}
+# Figure 6
+# Square
+knitr::include_graphics("./figure/coefplot_stage_2.png")
+```

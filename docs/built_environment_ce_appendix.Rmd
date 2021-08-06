@@ -1,0 +1,162 @@
+---
+title: "Appendix"
+output: 
+  officedown::rdocx_document:
+    base_format: "bookdown::word_document2"
+    number_sections: true
+    reference_num: false
+    reference_docx: ref_docs/ref_doc_crim.docx
+    pandoc_args: !expr rmdfiltr::add_replace_ampersands_filter(rmdfiltr::add_citeproc_filter(args = NULL))
+    tables:
+      caption:
+        style: Table Caption
+        pre: 'TABLE A'
+        sep: ' '
+    plots:
+      caption:
+        style: Image Caption
+        pre: 'FIGURE A'
+        sep: ' '
+bibliography: fulllibrary.bib
+csl: csl/apa-6th-edition.csl
+citeproc: no
+---
+
+```{r, include=FALSE}
+library(tidyverse)
+library(flextable)
+library(officedown)
+```
+
+## Neighborhood Social and Perceptual Measures
+
+Collective efficacy and its subscales (informal control expectations and cohesion and trust) were calculated using multi-level measurement models which adjust for sociodemographic composition of neighborhoods and conservatively shrink estimates toward zero where interrater reliability is lower [@sampsonNeighborhoodsViolentCrime1997a]. All indicators are four- or five-category ordinal indicators estimated using linear regression with dummies for each indicator to adjust for item difficulty and random respondent intercepts. All models feature neighborhood-level random intercepts which are extracted and used in subsequent models as empirical Bayes estimates of the neighborhood measures. I use a single factor for collective rfficacy which combines cohesion and trust and informal control expectations to mimic existing work in this field and using these data. A two-factor solution is weakly preferred in confirmatory factor models, though the resulting separate factors are highly correlated at both the individual ($\rho=0.70$ in 1995, $\rho=0.67$ in 2003) and neighborhood level ($\rho=0.71$ in 1995, $\rho=0.64$ in 2003).
+
+Table A1 depicts all indicators used to calculate the neighborhood measures including loadings from confirmatory factor analyses and overall neighborhood-level measure reliability from each multilevel model. Bracketed loadings reflect loadings on separate cohesion and trust and informal control expectations factors for comparison to the combined Collective Efficacy Factor.
+
+*Table A1 about here*
+
+
+## Neighborhood Structural Measures
+
+The social disorganization tradition recognizes crime and social control are rooted in structural characteristics of neighborhoods. To construct these measures, I obtained nine decennial census measures from the Longitudinal Tract Data Base (LTDB) [@loganInterpolatingDecennialCensus2014] based on those used by @sampsonNeighborhoodsViolentCrime1997a. The LTDB reweights indicators across changing boundaries between the 1990 and 2000 censuses to ensure they describe the same geographic areas. All measures are percentages and are listed in table A2. I use an oblimin-rotated alpha-scoring factor analysis to perform dimension reduction on these measures [@kaiserAlphaFactorAnalysis1965]. The factors were calculated simultaneously using both 1990 and 2001 observations for each NC to generate comparable measures over time. Three factors explain 87% of variation in the nine indicators and exhibit acceptable model fit ($\chi^{2}=7.69$, $df = 12$, $p=0.81$). Loadings are depicted in table A2.
+
+*Table A2 about here*
+
+
+Based on the indicators which most highly load on each factor, they are described as disadvantage, Hispanic / immigrant (concentration), and stability. Disadvantage loads primarily on under-18 population, unemployment, poverty, and female-headed households, and to a lesser-degree non-Hispanic black population. Hispanic / immigrant loads on Hispanic population, foreign born, and negatively on non-Hispanic black. Stability loads negatively on home ownership and positively on moves in the last 10 years. These were extracted as neighborhood-level correlation-preserving factor scores to produce a parsimonious set of structural predictors for use in subsequent models [@tenbergeNewResultsCorrelationpreserving1999].
+
+While the measures were chosen to replicate the structural measures used in @sampsonNeighborhoodsViolentCrime1997a, one indicator for disadvantage—percent of families on public assistance—was not available in the LTDB. The indicator for recent moves is also in the last 10 years rather than 5 years. Even with these differences—and calculating across both waves simultaneously—the resultant factor scores for 1990 neighborhoods are all correlated at over $\rho=.95$ with those from @sampsonNeighborhoodsViolentCrime1997a.
+
+## Built Environment Moderation
+
+Early intervention in the built environment may have the added benefit of reducing future social control burdens. The absence of criminogenic features may explain low crime in areas lacking collective efficacy. Conversely, the presence of criminogenic features may make crime “sticky” even in the presence of concerted action by residents [@st.jeanPocketsCrimeBroken2007]. This means collective efficacy could be more effective at restraining crime in the absence of environmental features that inhibit the exercise of informal control. Consequently, one might expect characteristics of the built environment to moderate the effect of collective efficacy on crime.
+
+This alternate set of models tests whether features of the built environment moderate the association between collective efficacy and crime. These models mirror the prior models of crime but introduce interaction terms between collective efficacy and the built environment features. Based on my theoretical framework, I expect all interactions between collective efficacy and built environment characteristics to be positive because criminogenic features of the environment will attenuate the negative the effect of informal social control on crime.
+
+### Crime and Moderation of Collective Efficacy Results
+
+The last set of models augments the original set examining associations with crime with interaction terms between collective efficacy and each of the hypothesized criminogenic built environment features. Interaction terms permit evaluating whether these features present challenges—"ecological disadvantage” in St. Jean's -@st.jeanPocketsCrimeBroken2007 terms—which are resistant to social control efforts; that is, locations where the returns to collective efficacy are low. Given the weak associations between collective efficacy and each form of crime, and the modest sample size which results in underpowered tests of interaction, these results should be interpreted with caution. Only very strong relationships are likely to be detected, but they may also be the result of sampling error and excessive partitioning of limited variation.
+
+*Table A3 about here*
+
+
+
+Table A3 contains point estimates from the negative binomial models of crime with interactions between collective efficacy and the built environment features. As this table reveals, a number of interaction terms are of large magnitude, particularly for homicide, but most are imprecisely estimated. The only interactions significant at a conventional 95% level are for abandoned buildings predicting gun assaults and any violence, and parking predicting property crime. These three interactions are all positive as expected, but under multiple testing, one would expect to obtain a similar number of significant interactions due to chance; this is not a particularly noteworthy finding. Interactions are notorious for making strong demands of the data, in terms of statistical power, so it is unsurprising that little is found here. Similar results--though opposite in sign--are found interacting built environment features with disadvantage.
+
+Nonetheless, these results may be indicative of violent crime in higher collective efficacy neighborhoods being concentrated in a small number of locations with abandoned buildings. As an examination of this, a cross-tabulation of gun assaults (not shown) reveals that over 58% of gun assaults in neighborhoods in the top quartile of collective efficacy occur on blocks in the top quartile of abandoned buildings. In neighborhoods in the bottom quartile of collective efficacy, this value is only 28%. That is, in low collective efficacy neighborhoods, gun assaults are fairly evenly distributed across blocks regardless of the concentration of abandoned buildings. In high collective efficacy neighborhoods, gun assaults are found where abandoned buildings are concentrated. This relationship might reflect what St. Jean [-@st.jeanPocketsCrimeBroken2007, p. 220] describes as efforts by efficacious residents to limit serious crime to particular areas of their neighborhoods due to the inability to eliminate it entirely.
+
+## Appendix References
+
+<div id="refs"></div>
+
+\newpage
+
+```{r structuremeasures, eval=TRUE, echo=FALSE, ft.arraystretch = 0.8, ft.tabcolsep = 4}
+
+tibble::tribble(~Measure, ~ Indicator, ~`PHDCN\n(1995)`, ~`CCAHS\n(2003)`,
+"Collective Efficacy (Cohesion & Trust + Informal Control Expectations)",    "",	"A=0.758",       "A=0.503",
+'Cohesion & Trust ("How much do you agree that...")',                          "",	"A=0.763",       "A=0.453",
+"",	"People around here are willing to help their neighbors.",                  	"0.699 [0.766]", "0.775 [0.813]",
+"",	"People in this neighborhood can be trusted.",	                              "0.726 [0.795]", "0.824 [0.881]",
+"",	"This is a close-knit neighborhood.",	                                        "0.660 [0.707]", "0.624 [0.646]",
+"",	"People in this neighborhood generally... get along with each other.",	        "0.515 [0.558]", "0.752 [0.799]",
+"",	"People in the neighborhood... share the same values.",	                        "0.483 [0.521]", "0.751 [0.790]",
+'Informal Control Expectations ("How likely is it...")', "", 	                                                                                                          "A=0.705", 	      "A=0.469",
+"",	"If a group of neighborhood children were skipping school and hanging out on a street corner, how likely is it that your neighbors would do something about it?",	"0.708 [0.788]",	"0.652 [0.780]",
+"",	"If some children were spray-painting graffiti on a local building, how likely is it that your neighbors would do something about it?",	                          "0.792 [0.874]",	"0.677 [0.811]",
+"",	"If a child was showing disrespect to an adult, how likely is it that people in your neighborhood would scold that child?",	                                      "0.629 [0.705]",	"0.593 [0.689]",
+"",	"If children were fighting out in the street, how likely is it that people in your neighborhood would stop it?",             	                                    "0.623 [0.681]",	"0.556 [0.644]",
+"",	"Neighborhood residents would organize to keep closest fire station open if it were to be closed down by city because of budget cuts.",                         	"0.615 [0.652]",	"0.578 [0.653]") %>%
+  flextable() %>%
+  merge_h_range(i = ~ Measure!="", j1 = 1, j2 = 2) %>%
+  set_header_labels(Measure = "Measure / Indicator", Indicator = "", `PHDCN\n(1995)` = "PHDCN\n(1995)") %>%
+  merge_h_range(i = 1, j1 = 1, j2 = 2, part = "header") %>%
+  set_table_properties(layout = "fixed") %>%
+  border_remove() %>%
+  width(j = 1, width = 0.2) %>%
+  width(j = 2, width = 3) %>% 
+  width(j = 3:4, width = 1) %>%
+  add_header(Measure = "", Indicator="", `PHDCN\n(1995)`="Loadings / Reliabilites (A)", `CCAHS\n(2003)`="CCAHS\n(2003)") %>%
+  merge_h_range(i = 1, j1 = 3, j2 = 4, part = "header") %>%
+  align(j = 3:4, align = "center", part = "all") %>%
+  # font(fontname = "Latin Modern Roman", part = "all") %>%
+  hline_top(border = officer::fp_border(width = 1), part = "header") %>%
+  hline_bottom(j = 3:4, border = officer::fp_border(width = 0.5), part = "header") %>%
+  hline_top(border = officer::fp_border(width = 0.5)) %>%
+  hline_bottom(border = officer::fp_border(width = 0.5), part = "body") %>%
+  hline_bottom(border = officer::fp_border(width = 1), part = "footer") %>%
+  padding(part = "all", padding.left = 1, padding.right = 1, padding.top = 2, padding.bottom = 2) %>%
+  add_footer_row(top=FALSE, values = "'A=' indicates neighborhood-level reliability; Brackets indicate loadings for separate factors for cohesion and trust and informal control expectations.", colwidths = 4) %>%
+  set_caption(caption = "Loadings and reliabilities for neighborhood perceptual measures.") %>%
+    fontsize(size = 9, part = "all") %>%
+  bg(i = seq(2, 12, by = 2), bg = "#dedede", part = "body")
+ 
+```
+
+
+\newpage
+
+```{r structurefactors, eval=TRUE, echo=FALSE, ft.arraystretch = 0.8, ft.tabcolsep = 4}
+factor_footer <- tibble::tribble(
+  ~Measure,	                         ~Disadvantage,	~`Hispanic / Immigration`,	~Stability,
+     "Eigenvalue",                      3.15, 2.74	,1.98,
+   "Proportion of Variance Explained",0.35, 0.30	,0.22)
+
+tibble::tribble(
+  ~Measure,	                         ~Disadvantage,	~`Hispanic / Immigration`,	~Stability,
+   "Under 18",                      	1.03, 0.25,  -0.13,
+   "Unemployment",                    0.74, -0.33,	0.14,
+   "Poverty",                         0.69, -0.15,	0.43,
+   "Female-Headed Households",        0.67, -0.44,	0.27,
+   "Home Ownership",                 -0.09, 0.02	,-0.96,
+   "Moved in Last 10 Years",         -0.19, 0.34	,0.79,
+   "Hispanic",                        0.30, 0.93	,0.05,
+   "Foreign Born",                   -0.12, 0.83	,0.15,
+   "Non-Hispanic Black",              0.43, -0.71,	-0.03) %>%
+  flextable() %>% 
+  add_footer_row(values = factor_footer[2,], colwidths = rep(1,4)) %>% 
+  add_footer_row(values = factor_footer[1,], colwidths = rep(1,4)) %>%
+  align(j = 2:4, align = "center", part = "all") %>%
+  # font(fontname = "Latin Modern Roman", part = "all") %>%
+  hline_top(border = officer::fp_border(width = 1), part = "header") %>%
+  hline_top(border = officer::fp_border(width = 0.5), part = "body") %>%
+  # hline_bottom(border = officer::fp_border(width = 0.5), part = "body") %>%
+  hline_bottom(border = officer::fp_border(width = 1), part = "body") %>%
+  width(j = 1, width = 2) %>%
+  width(j = 2:4, width = 1.2) %>% 
+  padding(part = "all", padding.left = 1, padding.right = 1, padding.top = 2, padding.bottom = 2) %>%
+  set_caption(caption = "Factor loadings for neighborhood structural measures.") %>%
+  bg(i = seq(2, 8, by = 2), bg = "#dedede", part = "body")
+```
+
+
+\newpage
+
+```{r secondstageint, eval=TRUE, echo=FALSE, message = FALSE, warning=FALSE, ft.arraystretch = 0.65, ft.tabcolsep = 4}
+source("../syntax/tables/second_stage_int_table.R")
+s2_int_table %>%
+  padding(part = "all", padding.left = 1, padding.right = 1, padding.top = 2, padding.bottom = 2) %>%
+  set_caption(caption = "Negative binomial estimates of crime.") %>%
+  bg(i = seq(2, 24, by = 2), bg = "#dedede", part = "body")
+```
