@@ -19,6 +19,9 @@
 # "F:/SecureData/CCAHS/DS0003/31142-0003-Data-REST.dta" is the CCAHS imputation data file for pulling incomes
 # "D:/Projects/dissertation_data/chicago/chicago_police_data/Crimes_-_2001_to_Present.csv" is a 1.6 gig 2001+ Chicago PD crime data file from Chicago's open data portal
 
+# file_path_index.R stores all relevant file paths for these files. You need only edit them there and the other scripts will run.
+
+
 # Packages needed to build:
 
 # required_packages <-
