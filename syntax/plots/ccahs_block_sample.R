@@ -4,9 +4,9 @@ library(sf)
 library(ragg)
 ragg_png <- function(...) ragg::agg_png(..., res = 300, units = "in")
 
-load("./data/chicago/derived/nc_boundaries.RData")
-load("./data/chicago/derived/crosswalks/complete_crosswalk.RData")
-load("./data/chicago/derived/blocks_1990_interpolated_sum.RData")
+load("./data/derived/nc_boundaries.RData")
+load("./data/derived/crosswalks/complete_crosswalk.RData")
+load("./data/derived/blocks_1990_interpolated_sum.RData")
 
 all_blocks <- complete_crosswalk %>% 
   inner_join(blocks_1990_interpolated_sum %>% 
@@ -38,4 +38,4 @@ boundary_map <- ggplot() +
   geom_sf(data = nc_boundaries, color = "black", fill = NA, size = 0.1) +
   theme_void()
 
-ggsave("../built_environment/docs/img/boundary_map.png",  boundary_map, width = 6, units = "in", device = ragg_png)
+ggsave("./docs/figure/boundary_map.png",  boundary_map, width = 6, units = "in", device = ragg_png)

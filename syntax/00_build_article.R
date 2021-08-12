@@ -1,16 +1,7 @@
-# This file just documents what it takes to actually build this monster.
-# You'll need a lot of restricted access data, some of which is likely to come
-# to you in a different format than what I have (e.g. crosswalks). It is also
-# tidyverse dependent, which means things might break. Warning: This will take
-# an assload of time, due in large part to measurement models, but also big
-# spatial joins.
-
-# PACKAGES NECESSARY TO BUILD
-required_packages   <- c("tidyverse", "areal", "sf", "janitor", "vroom", "tidycensus", "tigris", "psych", "lwgeom", "GPArotation")
-
-# SCRIPT NAMES
-processing_scripts  <- list.files("./syntax/chicago/data_processing/", full.names = T)
-measurement_scripts <- list.files("./syntax/chicago/measurement/", full.names = T)
+# This file just documents what it takes to actually build this monster. You'll
+# need a lot of restricted access data, some of which is likely to come to you
+# in a different format than what I have (e.g. crosswalks). It is also tidyverse
+# dependent, which means things might break. 
 
 # FILES NECESSARY TO BUILD (in order of appearance)
 
@@ -28,17 +19,34 @@ measurement_scripts <- list.files("./syntax/chicago/measurement/", full.names = 
 # "F:/SecureData/CCAHS/DS0003/31142-0003-Data-REST.dta" is the CCAHS imputation data file for pulling incomes
 # "D:/Projects/dissertation_data/chicago/chicago_police_data/Crimes_-_2001_to_Present.csv" is a 1.6 gig 2001+ Chicago PD crime data file from Chicago's open data portal
 
+# Packages needed to build:
 
+# required_packages <-
+#   c(
+#     "tidyverse",
+#     "sf",
+#     "areal",
+#     "janitor",
+#     "vroom",
+#     "tigris",
+#     "tidycensus",
+#     "psych",
+#     "lwgeom",
+#     "GPArotation",
+#     "lme4",
+#     "broom.mixed",
+#     "piecewiseSEM",
+#     "ragg"
+#   )
+# install.packages(required_packages) # Uncomment to run
 
+# Process data, run models, generate plots and tables
+source("./syntax/01_process_data.R")
+source("./syntax/02_run_analyses.R")
+source("./syntax/03_generate_output.R")
 
-
-# DATA FIRST
-for(script in processing_scripts){
-  message(paste0("Running: ", script))
-  source(script)
-}
-# MEASUREMENT SECOND
-for(script in measurement_scripts){
-  message(paste0("Running: ", script))
-  source(script)
-}
+# Render the documents
+## Note there is a figures doc, but it isn't needed
+rmarkdown::render("./docs/built_environment_ce.Rmd")
+rmarkdown::render("./docs/built_environment_ce_appendix.Rmd")
+rmarkdown::render("./docs/built_environment_ce_figures.Rmd")

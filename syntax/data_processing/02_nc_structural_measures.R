@@ -2,9 +2,16 @@
 # consistent structural measures across the 1990 and 2000 census on 2000 tract
 # geometries. Then I do factor analysis to get the factors from Sampson et al. 
 # 1997, except with one less measure not in the LTDB.
+#
 # Note converting the LTDB 1990 and 2000 files to 2000 census tracts requires 
 # the original files and Stata scripts from here (as of 3/24/2021): 
 # https://s4.ad.brown.edu/projects/diversity/researcher/bridging.htm
+# THIS SCRIPT REQUIRES THESE CONVERTED FILES
+# I have used the following naming scheme:
+# std_1990_fullcount_cw2000.dta # 1990 Census full count vars crosswalked to year 2000 tracts
+# std_1990_sample_cw2000.dta # 1990 Census sample vars crosswalked to year 2000 tracts
+# std_2000_full_cw2000.dta # 2000 Census full count vars crosswalked to year 2000 tracts
+# std_2000_sample_cw2000.dta # 2000 Census sample vars crosswalked to year 2000 tracts
 #
 # So an interesting fact: You can actually use EITHER year 2000 or 1990 tracts
 # from tigris here and get the same result. Always 866 perfect matches, which is
@@ -17,8 +24,9 @@
 library(tidyverse)
 library(sf)
 source("./syntax/project_functions.R")
+source("./syntax/file_path_index.R")
 
-load("./data/chicago/derived/crosswalks/complete_crosswalk.RData")
+load("./data/derived/crosswalks/complete_crosswalk.RData")
 st_queen <- function(a, b = a) st_relate(a, b, pattern = "F***T****")
 
 nc_tracts <- complete_crosswalk %>%
@@ -40,14 +48,14 @@ nc_boundaries <- nc_sf %>%
   group_by(ccahs_nc) %>%
   summarize(geometry = st_union(geometry))
 
-save(nc_boundaries, file = "./data/chicago/derived/nc_boundaries.RData")
+save(nc_boundaries, file = "./data/derived/nc_boundaries.RData")
 
 nc_neighbors <- nc_boundaries  %>%
   mutate(neighbors = st_queen(.)) %>%
   st_drop_geometry() %>%
   tidyr::unnest(neighbors)
 
-save(nc_neighbors, file = "./data/chicago/derived/nc_neighbors.RData")
+save(nc_neighbors, file = "./data/derived/nc_neighbors.RData")
 
 nc_areas <- nc_sf %>%
   st_drop_geometry() %>%
@@ -55,17 +63,20 @@ nc_areas <- nc_sf %>%
   summarize(area_nc = sum(area_tract)) %>%
   ungroup()
 
-ltdb_1990 <- inner_join(haven::read_stata("F:/LTDB/ltdb_interpolate_stata/std_1990_fullcount_cw2000.dta"),
-           haven::read_stata("F:/LTDB/ltdb_interpolate_stata/std_1990_sample_cw2000.dta")) %>%
+
+
+ltdb_1990 <- inner_join(haven::read_stata(ltdb_1990_fullcount_path),
+           haven::read_stata(ltdb_1990_sample_path)) %>%
   mutate(year = 1990) %>%
   rename_with(~str_remove(., "90|00"))
 
-ltdb_2000 <- inner_join(haven::read_stata("F:/LTDB/ltdb_interpolate_stata/std_2000_full_cw2000.dta"),
-           haven::read_stata("F:/LTDB/ltdb_interpolate_stata/std_2000_sample_cw2000.dta")) %>%
+ltdb_2000 <- inner_join(haven::read_stata(ltdb_2000_fullcount_path),
+           haven::read_stata(ltdb_2000_sample_path)) %>%
     mutate(year = 2000) %>%
   rename_with(~str_remove(., "00")) %>%
   select(-rent) # whoops, left rent in
 
+# Check to make sure all vars present and identically named
 x_notin_y(names(ltdb_1990), names(ltdb_2000))
 
 ltdb_il <- bind_rows(ltdb_1990, ltdb_2000) %>%
@@ -118,6 +129,8 @@ ltdb_il_nc <- ltdb_il %>%
   select(-matches("^(d_|n_)")) %>%
   left_join(nc_areas) %>%
   mutate(density_ltdb_nc = population_ltdb_nc / area_nc)
+
+# ten Berge scores from alpha scoring oblimin factor analysis
   
 ltdb_factors <- ltdb_il_nc %>% 
   select(-ccahs_nc, -phdcn_nc, -year, -perc_edcollege, -perc_edhighschool, -perc_professional, -population_ltdb_nc, -density_ltdb_nc, -area_nc) %>% 
@@ -135,7 +148,7 @@ ltdb_factors_wide <- ltdb_factors %>%
   select(-year) %>%
   pivot_wider(names_from = name, values_from = value)
 
-save(ltdb_factors_wide, file = "./data/chicago/derived/ltdb_factors_wide.RData")
+save(ltdb_factors_wide, file = "./data/derived/ltdb_factors_wide.RData")
 
 # These are just notes on factor loadings across different measures in SR&E1997
 # and the CCAHS for purposes of comparison.

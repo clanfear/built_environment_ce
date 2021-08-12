@@ -8,9 +8,8 @@ library(sf)
 library(tidycensus)
 library(areal)
 source("./syntax/project_functions.R")
-load("./data/chicago/derived/il_block.RData")
-load("./data/chicago/derived/crosswalks/complete_crosswalk.RData")
-
+load("./data/derived/il_block.RData")
+load("./data/derived/crosswalks/complete_crosswalk.RData")
 
 block_pops <- get_decennial("block", state = "IL", county = "Cook",
                           geometry  = FALSE, year = 2000,
@@ -41,7 +40,7 @@ blocks_1990_interpolated_sum <- aw_interpolate(blocks_1990,
                                                extensive = "population", 
                                                weight = "sum", output = "sf")
 
-save(blocks_1990_interpolated_sum, file = "./data/chicago/derived/blocks_1990_interpolated_sum.RData")
+save(blocks_1990_interpolated_sum, file = "./data/derived/blocks_1990_interpolated_sum.RData")
 
 block_pop_estimates_2000 <- complete_crosswalk %>% 
   inner_join(blocks_1990_interpolated_sum %>% 
@@ -54,4 +53,4 @@ block_pop_estimates_2000 <- complete_crosswalk %>%
                       area_block       = area, 
                       density_block    = density))
 
-save(block_pop_estimates_2000, file = "./data/chicago/derived/block_pop_estimates_2000.RData")
+save(block_pop_estimates_2000, file = "./data/derived/block_pop_estimates_2000.RData")

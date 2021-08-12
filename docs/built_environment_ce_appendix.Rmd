@@ -66,6 +66,10 @@ Table A3 contains point estimates from the negative binomial models of crime wit
 
 Nonetheless, these results may be indicative of violent crime in higher collective efficacy neighborhoods being concentrated in a small number of locations with abandoned buildings. As an examination of this, a cross-tabulation of gun assaults (not shown) reveals that over 58% of gun assaults in neighborhoods in the top quartile of collective efficacy occur on blocks in the top quartile of abandoned buildings. In neighborhoods in the bottom quartile of collective efficacy, this value is only 28%. That is, in low collective efficacy neighborhoods, gun assaults are fairly evenly distributed across blocks regardless of the concentration of abandoned buildings. In high collective efficacy neighborhoods, gun assaults are found where abandoned buildings are concentrated. This relationship might reflect what St. Jean [-@st.jeanPocketsCrimeBroken2007, p. 220] describes as efforts by efficacious residents to limit serious crime to particular areas of their neighborhoods due to the inability to eliminate it entirely.
 
+## Replication Files
+
+All files required to reproduce this article including analyses, plots, tables, and the text itself are available at [redacted], excepting restricted access data files. The necessary restricted files are documented in the replication repository readme.
+
 ## Appendix References
 
 <div id="refs"></div>
@@ -73,6 +77,7 @@ Nonetheless, these results may be indicative of violent crime in higher collecti
 \newpage
 
 ```{r structuremeasures, eval=TRUE, echo=FALSE, ft.arraystretch = 0.8, ft.tabcolsep = 4}
+# These are finicky and in the appendix, so I did them manually.
 
 tibble::tribble(~Measure, ~ Indicator, ~`PHDCN\n(1995)`, ~`CCAHS\n(2003)`,
 "Collective Efficacy (Cohesion & Trust + Informal Control Expectations)",    "",	"A=0.758",       "A=0.503",
@@ -118,6 +123,8 @@ tibble::tribble(~Measure, ~ Indicator, ~`PHDCN\n(1995)`, ~`CCAHS\n(2003)`,
 \newpage
 
 ```{r structurefactors, eval=TRUE, echo=FALSE, ft.arraystretch = 0.8, ft.tabcolsep = 4}
+# These are finicky and in the appendix, so I did them manually.
+
 factor_footer <- tibble::tribble(
   ~Measure,	                         ~Disadvantage,	~`Hispanic / Immigration`,	~Stability,
      "Eigenvalue",                      3.15, 2.74	,1.98,
@@ -154,7 +161,7 @@ tibble::tribble(
 \newpage
 
 ```{r secondstageint, eval=TRUE, echo=FALSE, message = FALSE, warning=FALSE, ft.arraystretch = 0.65, ft.tabcolsep = 4}
-source("../syntax/tables/second_stage_int_table.R")
+load("../output/s2_int_table.RData")
 s2_int_table %>%
   padding(part = "all", padding.left = 1, padding.right = 1, padding.top = 2, padding.bottom = 2) %>%
   set_caption(caption = "Negative binomial estimates of crime.") %>%

@@ -37,3 +37,5 @@ rsconnect/
 
 # Additionals
 /ignore/
+/data/derived/*
+/output/*

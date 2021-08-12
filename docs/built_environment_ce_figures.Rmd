@@ -11,10 +11,11 @@ output:
 ---
 
 ```{r, include=FALSE}
+# This script pretty much does nothing--it just prints the graphics to a doc at the appropriate sizes.
 library(tidyverse)
-library(flextable)
 library(officedown)
 ```
+
 \newpage
 
 ```{r basicmodel, echo=FALSE, fig.width = 4, fig.height = 4/2.891, fig.scap= "Theoretical model of collective efficacy, the built environment, and crime.",fig.cap="Theoretical model of collective efficacy, the built environment, and crime. Tested hypotheses represented as paths H1, H2, and H3"}

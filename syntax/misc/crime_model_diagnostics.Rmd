@@ -1,0 +1,45 @@
+---
+title: "Crime Model Diagnostics"
+output: html_document
+---
+
+```{r setup, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(lme4)
+library(lavaan)
+library(broom.mixed)
+library(DHARMa)
+load("../../output/base_second_stage_list.RData")
+```
+
+
+
+This document depicts model diagnostics for the negative binomial mixed models of block-level crime counts. These model diagnostics are conducted using DHARMa. This requires first generating simulated residuals:
+
+```{r, message = FALSE, warning = FALSE}
+glmer_residuals <- map(base_second_stage_list, ~ simulateResiduals(., n = 1000))
+```
+
+Then I walk across the different models. The main plots of interest are the QQ plots of the binned residuals which generally exhibit exceptional fit. The predicted to residual plots show some evidence of nonlinearity in the residuals in some cases. This can generally be addressed using a quadratic transformation of disadvantage. Using this transformation has no impact on the focal predictors and is somewhat arbitrary, though there is evidence for quadratic disadvantage effects in other works. Since it has no impact on my analyses, I use the default (linear) specification.
+
+# Linear Disadvantage
+
+These are the diagnostics with an untransformed (linear) disadvantage term.
+
+```{r, message = FALSE, warning = FALSE}
+
+walk(seq_along(glmer_residuals), ~ plot(glmer_residuals[[.]], 
+                                        main = names(base_second_stage_list)[.]))
+```
+
+
+# Quadratic Disadvantage
+
+These are diagnostics with a second-order orthogonal polynomial on disadvantage (a squared term).
+
+```{r}
+load("../../output/base_second_stage_polydis_list.RData")
+glmer_polydis_residuals <- map(base_second_stage_polydis_list, ~ simulateResiduals(., n = 1000))
+walk(seq_along(glmer_polydis_residuals), ~ plot(glmer_polydis_residuals[[.]], 
+                                        main = names(base_second_stage_polydis_list)[.]))
+```

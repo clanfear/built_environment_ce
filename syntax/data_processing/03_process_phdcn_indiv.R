@@ -3,12 +3,12 @@
 # scales to make sure they're all correlated the same. That isn't important for
 # SEM/CFA but it is vital for the hierarchical measurement models.
 
+secure_data_dir <- "F:/SecureData/"
+
 library(tidyverse)
 source("./syntax/project_functions.R")
 
-phdcn_cs_dir    <- "F:/SecureData/PHDCN_Community_Survey_9497_ICPSR_02766/"
-
-phdcn_cs_individual_raw <- haven::read_sav(paste0(phdcn_cs_dir, "DS0001/02766-0001-Data-REST.sav"))
+phdcn_cs_individual_raw <- haven::read_sav(phdcn_indiv_path)
 
 
 # The local exchange scale is based on five items in the survey that asked how often
@@ -153,10 +153,10 @@ ind_dir_check <- function(pattern, r = FALSE, df = phdcn_cs_individual_long){
 }
 
 ind_vec <- c("^(COHTR_|INF_)", "^PE_", "^LC_", "^PV_", "^KT", "^TE", "^AT")
-if(!all(map_lgl(ind_vec, ind_dir_check))) message("Directionality problem detected.")
+if(!all(map_lgl(ind_vec, ind_dir_check))) message("Directionality problem detected.") else message("Factor directionality check passed.")
 map(ind_vec, ~ind_dir_check(., r=TRUE))
 
 
 
-save(phdcn_cs_individual_long, file = "./data/chicago/derived/phdcn_cs_individual_long.RData")
-save(phdcn_cs_individual_wide, file = "./data/chicago/derived/phdcn_cs_individual_wide.RData")
+save(phdcn_cs_individual_long, file = "./data/derived/phdcn_cs_individual_long.RData")
+save(phdcn_cs_individual_wide, file = "./data/derived/phdcn_cs_individual_wide.RData")

@@ -1,4 +1,7 @@
-load("../output/psem_hlm_list_summary.RData")
+library(tidyverse)
+library(flextable)
+source("./syntax/project_functions.R")
+load("./output/psem_hlm_list_summary.RData")
 
 first_stage_data <-  psem_hlm_list_summary$coefficients %>%
   select(Response, Predictor, Estimate, Std.Error) %>%
@@ -151,3 +154,5 @@ s1_table <-
   hline_bottom(border = officer::fp_border(width = 1), part = "body") %>%
   hline_top(border = officer::fp_border(width = 1), part = "header") %>%
   hline_top(border = officer::fp_border(width = 0.5))
+
+save(s1_table, file = "./output/s1_table.RData")

@@ -6,8 +6,8 @@
 
 library(tidyverse)
 source("./syntax/project_functions.R")
-
-phdcn_neighb_raw <- haven::read_sav("F:/SecureData/da02766-0002_Matsueda_02062019.sav")
+source("./syntax/file_path_index.R")
+phdcn_neighb_raw <- haven::read_sav(phdcn_cs_nc_path)
 
 # Baffling thing about the NC data is there is no NC 792, which does exist in individual data
 # Why is this missing from the neighborhood files?
@@ -61,4 +61,4 @@ phdcn_nc <- phdcn_neighb_raw %>%
 # This approach is problematic because it yields a linear relationship between 1995 rate and log rate and a log-linear one between the 1990 ones.
 
 phdcn_nc <- phdcn_nc %>% select(-LOG_HOMICIDE_1990, -LOG_HOMICIDE_1995)
-save(phdcn_nc, file = "./data/chicago/derived/phdcn_nc.RData")
+save(phdcn_nc, file = "./data/derived/phdcn_nc.RData")

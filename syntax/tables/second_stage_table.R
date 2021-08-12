@@ -1,4 +1,7 @@
-load("../output/psem_hlm_list_summary.RData")
+library(tidyverse)
+library(flextable)
+source("./syntax/project_functions.R")
+load("./output/psem_hlm_list_summary.RData")
 
 # SECOND STAGE 
 second_stage_data <- psem_hlm_list_summary$coefficients %>%
@@ -94,3 +97,4 @@ s2_table <-
   hline_top(border = officer::fp_border(width = 1), part = "header") %>%
   hline_top(border = officer::fp_border(width = 0.5))
 
+save(s2_table, file = "./output/s2_table.RData")

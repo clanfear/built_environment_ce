@@ -1,7 +1,7 @@
 library(tidyverse)
 library(flextable)
-source("../shared/syntax/project_functions.R")
-load("./data/chicago/derived/ccahs_block_analytical_unstd.RData")
+source("./syntax/project_functions.R")
+load("./data/analytical_data/ccahs_block_analytical_unstd.RData")
 
 # Quick check to see quartiles of CE and abandoned; didn't rename from tertiles because lazy
 ccahs_block_analytical_unstd %>%
@@ -12,7 +12,7 @@ ccahs_block_analytical_unstd %>%
 
 # Descriptives table with density plots in-line. Needs postprocessing for document.
 be_descriptives_dat <- ccahs_block_analytical_unstd %>%
-  select(-census_block, -ccahs_tract, -density_block_2, -FAC_disadv_2000_2, -density_block) %>%
+  select(-density_block_2, -FAC_disadv_2000_2, -density_block) %>%
   mutate(across(c(orig_density_block, density_ltdb_nc_2000), ~ . / 1000)) %>%
   pivot_longer(-ccahs_nc) %>%
   mutate(level = factor(ifelse(str_detect(name, "^(BE|CRIME|MIX|orig)"), "Block (N=1,641)", "Neighborhood (N=343)"), levels = c("Neighborhood (N=343)", "Block (N=1,641)"))) %>%
@@ -75,28 +75,4 @@ be_descriptives_dat <- ccahs_block_analytical_unstd %>%
   rename(Measure = name) %>%
   relocate(Min, df, Max, .after = last_col())
 
-save(be_descriptives_dat, file = "./output/chicago/tables/be_descriptives_dat.RData")
-
-be_descriptives <- be_descriptives_dat %>%
-  as_grouped_data(groups = "level") %>%
-  flextable() %>%
-  mk_par(j = "df", i = ~ !is.na(Max), value = as_paragraph(
-    plot_chunk(value = df, type = "density", col = "black", 
-               width = 0.8, height = .2, free_scale = TRUE)
-  )) %>%
-  set_header_labels(df = "Density", level = "") %>%
-  merge_h_range(i = c(1,8), j1 = 1, j2 = 7) %>%
-  font(fontname = "Latin Modern Roman", part = "all") %>%
-  fontsize(size = 11, part = "all") %>%
-  set_table_properties(width = 0.45, layout = "autofit") %>%
-  border_remove() %>%
-  hline_bottom(border = officer::fp_border(width = 1)) %>%
-  hline_top(border = officer::fp_border(width = 1), part = "header") %>%
-  hline_top(border = officer::fp_border(width = 0.5))
-
-save_as_image(be_descriptives, "./output/chicago/tables/descriptives.png")
-
-be_descriptives %>%
-  font(fontname = "Times New Roman", part = "all") %>%
-  save_as_docx(path = "./output/chicago/tables/descriptives.docx")
-  
+save(be_descriptives_dat, file = "./output/be_descriptives_dat.RData")

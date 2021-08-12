@@ -4,10 +4,9 @@
 
 library(tidyverse)
 source("./syntax/project_functions.R")
-ccahs_dir    <- "F:/SecureData/CCAHS/"
 
 # Note CCAHS has a .do file to change missings (e.g. -2, -5) to .
-ccahs_individual_raw <- haven::read_dta(paste0(ccahs_dir, "DS0001/31142-0001-Data-REST.dta"))
+ccahs_individual_raw <- haven::read_dta(ccahs_main_path)
 
 # PULL NC-LEVEL PRECALCULATED MEASURES
 
@@ -26,4 +25,4 @@ ccahs_nc <- ccahs_individual_raw %>%
   group_by(NC_ID) %>%
   summarize_all(~mean(.))
 
-save(ccahs_nc, file = "./data/chicago/derived/ccahs_nc.RData")
+save(ccahs_nc, file = "./data/derived/ccahs_nc.RData")

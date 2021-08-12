@@ -1,4 +1,7 @@
-load("../output/psem_hlm_int_list_summary.RData")
+library(tidyverse)
+library(flextable)
+source("./syntax/project_functions.R")
+load("./output/psem_hlm_int_list_summary.RData")
 
 second_stage_data_int <- psem_hlm_int_list_summary$coefficients %>%
   select(Response, Predictor, Estimate, Std.Error) %>%
@@ -102,3 +105,5 @@ s2_int_table <-
   hline_bottom(border = officer::fp_border(width = 0.5), part = "body") %>%
   hline_top(border = officer::fp_border(width = 1), part = "header") %>%
   hline_top(border = officer::fp_border(width = 0.5))
+
+save(s2_int_table, file = "./output/s2_int_table.RData")

@@ -30,7 +30,7 @@ library(officedown)
 
 # Abstract
 
-*Collective efficacy is a prominent explanation for neighborhood crime concentrations. Just as crime is concentrated in particular neighborhoods, within neighborhoods crime is concentrated in particular criminogenic locations. Research suggests criminogenic locations are determined by features of the built environment. This study links collective efficacy with situational opportunity to propose that collective efficacy facilitates the removal of criminogenic features of the built environment. I test this by examining associations (1) between past collective efficacy and present criminogenic features of the built environment, and (2) between those built environment features and crime, net of present collective efficacy. These are modeled using piecewise structural equations with generalized linear mixed-effect regressions on data from 1,641 blocks in 343 Chicago neighborhoods. Five types of police-reported crime (N=424,698) are modeled using eight block-level built environment features in the 2003 Chicago Community Area Health Study (N=3,105) and neighborhood collective efficacy from the CCAHS and 1995 PHDCN Community Survey (N=8,782). Findings suggest neighborhoods with high collective efficacy maintain low rates of crime in part by limiting criminogenic built environment features, in particular abandoned buildings. This crime control pathway is important because changes to the built environment are long-lasting and reduce the need for future interventions against crime.*
+*Collective efficacy is a prominent explanation for neighborhood crime concentrations. Just as crime is concentrated in particular neighborhoods, within neighborhoods crime is concentrated in particular criminogenic locations. Research suggests criminogenic locations are determined by features of the built environment. This study links collective efficacy with situational opportunity to propose that collective efficacy facilitates the removal of criminogenic features of the built environment. I test this by examining associations (1) between past collective efficacy and present criminogenic features of the built environment, and (2) between those built environment features and crime, net of present collective efficacy. These are modeled using piecewise structural equations with generalized linear mixed-effect regressions on data from 1,641 blocks in 343 Chicago neighborhoods. Five types of police-reported crime are modeled using eight block-level built environment features in the 2003 Chicago Community Area Health Study (N=3,105) and neighborhood collective efficacy from the CCAHS and 1995 PHDCN Community Survey (N=8,782). Findings suggest neighborhoods with high collective efficacy maintain low rates of crime in part by limiting criminogenic built environment features, in particular abandoned buildings. This crime control pathway is important because changes to the built environment are long-lasting and reduce the need for future interventions against crime.*
 
 # Introduction
 
@@ -259,7 +259,7 @@ be_descriptives_dat %>%
 
 ```{r secondstage, echo=FALSE, message=FALSE, warning=FALSE, eval=TRUE, ft.arraystretch = 0.6, ft.tabcolsep = 4}
 # Table 2
-source("../syntax/tables/second_stage_table.R")
+load("../output/s2_table.RData")
 s2_table %>%
   padding(part = "all", padding.left = 1, padding.right = 1, padding.top = 2, padding.bottom = 2) %>%
   set_caption(caption = "Negative binomial estimates of crime") %>%
@@ -270,7 +270,7 @@ s2_table %>%
 
 ```{r firststage, echo=FALSE, message=FALSE, warning=FALSE, eval=TRUE, ft.arraystretch = 0.8, ft.tabcolsep = 4}
 # Table 3
-source("../syntax/tables/first_stage_table.R")
+load("../output/s1_table.RData")
 s1_table %>%
   padding(part = "all", padding.left = 1, padding.right = 1, padding.top = 2, padding.bottom = 2) %>%
   set_caption(caption = "Linear model estimates of built environment features and collective efficacy") %>%

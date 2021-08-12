@@ -5,13 +5,13 @@
 # This is all a bit more involved than the PHDCN-CS.
 
 library(tidyverse)
+source("./syntax/file_path_index.R")
 source("./syntax/project_functions.R")
-ccahs_dir    <- "F:/SecureData/CCAHS/"
 
 # Note CCAHS has a .do file to change missings (e.g. -2, -5) to .
 # I do this manually to avoid invoking Stata.
-ccahs_individual_raw     <- haven::read_dta(paste0(ccahs_dir, "DS0001/31142-0001-Data-REST.dta"))
-ccahs_individual_imputed <- haven::read_dta(paste0(ccahs_dir, "DS0003/31142-0003-Data-REST.dta"))
+ccahs_individual_raw     <- haven::read_dta(ccahs_main_path)
+ccahs_individual_imputed <- haven::read_dta(ccahs_impute_path)
 
 # Not in CCAHS: c_years_in_neighb + c_moves_last_5yr
 
@@ -134,7 +134,7 @@ ind_dir_check <- function(pattern, r = FALSE, df = ccahs_individual_long){
 }
 
 ind_vec <- c("^(COHTR_|INF_)", "^PE_", "^LC_", "^PV_", "^TE", "^KT")
-if(!all(map_lgl(ind_vec, ind_dir_check))) message("Directionality problem detected.")
+if(!all(map_lgl(ind_vec, ind_dir_check))) message("Directionality problem detected.") else message("Factor directionality check passed.")
 map(ind_vec, ~ind_dir_check(., r=TRUE))
 
 ccahs_individual_long %>%
@@ -144,6 +144,6 @@ ccahs_individual_long %>%
   na.omit() %>% 
   cor()
 
-save(ccahs_individual_long, file = "./data/chicago/derived/ccahs_individual_long.RData")
-save(ccahs_individual_wide, file = "./data/chicago/derived/ccahs_individual_wide.RData")
+save(ccahs_individual_long, file = "./data/derived/ccahs_individual_long.RData")
+save(ccahs_individual_wide, file = "./data/derived/ccahs_individual_wide.RData")
 

@@ -7,12 +7,13 @@
 library(tidyverse)
 library(sf)
 library(janitor)
+source("./syntax/file_path_index.R")
 source("./syntax/project_functions.R")
-# This file is ~1.6 gigs; if you're replicating, you'll have to change directory
-cpd_crimes_raw <- vroom::vroom("D:/Projects/dissertation_data/chicago/chicago_police_data/Crimes_-_2001_to_Present.csv")
 
-load("./data/chicago/derived/il_block.RData")
-load("./data/chicago/derived/crosswalks/complete_crosswalk.RData")
+cpd_crimes_raw <- vroom::vroom(cpd_data_path)
+
+load("./data/derived/il_block.RData")
+load("./data/derived/crosswalks/complete_crosswalk.RData")
 
 # Map these to blocks and tracts, then to NCs
 
@@ -76,7 +77,7 @@ cpd_crimes_block <- cpd_crimes_block_all %>%
   mutate(across(c(matches("gun")), ~ ifelse(is.na(.) & !is.na(homicide), 0, .))) %>%
   rename_with(~paste0("CRIME_", .), -c(census_tract_6, census_block, year))
 
-save(cpd_crimes_block, file = "./data/chicago/derived/cpd_crimes_block.RData")
+save(cpd_crimes_block, file = "./data/derived/cpd_crimes_block.RData")
 
 # tracts
 
@@ -85,7 +86,7 @@ cpd_crimes_tract <- cpd_crimes_block %>%
   group_by(census_tract_6, year) %>%
   summarize(across(everything(), ~sum(., na.rm=TRUE)))
 
-save(cpd_crimes_tract, file = "./data/chicago/derived/cpd_crimes_tract.RData")
+save(cpd_crimes_tract, file = "./data/derived/cpd_crimes_tract.RData")
 
 # nc
 
@@ -95,8 +96,8 @@ cpd_crimes_nc <- cpd_crimes_tract %>%
   summarize(across(starts_with("CRIME"), ~sum(.))) %>%
   ungroup()
 
-save(cpd_crimes_nc, file = "./data/chicago/derived/cpd_crimes_nc.RData")
+save(cpd_crimes_nc, file = "./data/derived/cpd_crimes_nc.RData")
 
 cpd_crimes_nc_2003 <- cpd_crimes_nc %>% filter(year==2003)
 
-save(cpd_crimes_nc_2003, file = "./data/chicago/derived/cpd_crimes_nc_2003.RData")
+save(cpd_crimes_nc_2003, file = "./data/derived/cpd_crimes_nc_2003.RData")
