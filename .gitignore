@@ -39,3 +39,4 @@ rsconnect/
 /ignore/
 /data/derived/*
 /output/*
+/data/raw/street_center_lines/*

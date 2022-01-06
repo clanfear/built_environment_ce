@@ -1,20 +1,19 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# built\_environment\_ce
+# built_environment_ce
 
-This repository contains the data and code for the paper:
+This repository contains the data and code for the article:
 
-> Lanfear, Charles C. (2021). Collective Efficacy, Opportunity, and the
-> Built Environment.
+> Lanfear, Charles C. (2022). Collective Efficacy and the Built
+> Environment. *Criminology*, 60(2)
 
 ### How to cite
 
 Please cite this compendium as:
 
-> Lanfear, Charles C. (2021). *Repository of R code and data for
-> ‘Collective Efficacy, Opportunity, and the Built Environment’*.
-> Accessed 11 Aug 2021.
+> Lanfear, Charles C. (2022). *Repository of R code and data for
+> ‘Collective Efficacy the Built Environment’*. Accessed 06 Jan 2022.
 
 ### How to download
 
@@ -45,10 +44,9 @@ You can download the compendium as a zip from from this URL:
 ### Licenses
 
 **Text and figures :**
-[CC-BY-NC-SA-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
 
-**Code :**
-[CC-BY-NC-SA-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+**Code :** [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
 
 **Data :** [CC-0](http://creativecommons.org/publicdomain/zero/1.0/)
 attribution requested in reuse.

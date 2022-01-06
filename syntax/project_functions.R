@@ -3,6 +3,12 @@ standardize <- function(input, scale=1){
   return((x- mean(x, na.rm=T))/(scale*sd(x, na.rm=T)))
 }
 
+no_lead_zero <- function(x){
+  sprintf("%.02f", x) |>
+    str_replace("^(\\s*[+|-]?)0\\.", "\\1." ) |>
+    str_replace("-.00", ".00")
+}
+
 valcheck <- function(df){
   numerics <- df[,sapply(df, is.numeric)]
   sapply(numerics, function(x){
@@ -42,12 +48,12 @@ x_in_y <- function(x, y){
   )
 }
 
-extract_EB_res <- function(model, varname, group = "TRACT"){
-  eb_res <- HLMdiag::HLMresid(model, group, type="EB", standardize=F) %>% 
-    tibble::rownames_to_column(var=group)
-  names(eb_res)[2] <- varname
-  return(eb_res)
-}
+# extract_EB_res <- function(model, varname, group = "TRACT"){
+#   eb_res <- HLMdiag::HLMresid(model, group, type="EB", standardize=F) %>% 
+#     tibble::rownames_to_column(var=group)
+#   names(eb_res)[2] <- varname
+#   return(eb_res)
+# }
 
 list_missing <- function(x){
   missings <- lapply(x, function(x) sum(is.na(x)))
@@ -64,7 +70,7 @@ lme_reliability <- function(x){
   return(sum(t00 / (t00 + s2 / n)) / J)
 }
 
-# Not convinced this is the right reliability calculation
+# Not convinced this is the right reliability calculation but results very similar to what is out there
 lme_reliability_3lvl <- function(x){
   var_components <- insight::get_variance(x)
   t00 <- var_components$var.intercept[["NC_ID"]] #t00 is between group variance

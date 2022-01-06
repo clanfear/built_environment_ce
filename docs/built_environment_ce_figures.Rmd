@@ -60,7 +60,7 @@ knitr::include_graphics("./figure/ce_be_model.png")
 
 \newpage
 
-```{r coefplot, echo=FALSE, fig.width = 6, fig.height = 6,  fig.scap = "Estimated incidence rate ratios and 95% confidence intervals for selected predictors of five crime types.", fig.cap="Estimated incidence rate ratios and 95% confidence intervals for selected predictors of five crime types. Predictors are standardized, outcomes are log-counts. Estimates significant at p < .05 are in black"}
+```{r coefplot, echo=FALSE, fig.width = 6, fig.height = 6,  fig.scap = "Estimated incidence rate ratios and 95% confidence intervals for selected predictors of five crime types.", fig.cap="Estimated incidence rate ratios and 95% confidence intervals for selected predictors of five crime types. Predictors are standardized, outcomes are log-counts. Estimates significant at p < .05 are in black. N = 1641"}
 # Figure 6
 # Square
 knitr::include_graphics("./figure/coefplot_stage_2.png")

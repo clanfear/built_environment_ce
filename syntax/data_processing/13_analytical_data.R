@@ -15,6 +15,7 @@ ccahs_block_analytical_unstd <- ccahs_block_sso_crime %>%
   left_join(ltdb_factors_wide, by = c("phdcn_nc", "ccahs_nc"))  %>%
   select(CRIME_homicide_2004_2006,
          CRIME_assault_battery_gun_2004_2006,
+         CRIME_homicide_assault_battery_gun_2004_2006,
          CRIME_robbery_2004_2006,
          CRIME_violent_2004_2006,
          CRIME_property_2004_2006,
@@ -34,6 +35,7 @@ ccahs_block_analytical_unstd <- ccahs_block_sso_crime %>%
          MIXED_LAND_USE_2001,
          CE_hlm_2001,
          orig_density_block = density_block,
+         street_class_near,
          ccahs_nc) %>%
   mutate(FAC_disadv_2000_2 = FAC_disadv_2000^2,
          density_block     = poly(orig_density_block, 2)[,1],

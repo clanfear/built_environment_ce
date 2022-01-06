@@ -27,11 +27,11 @@ nibrs_codes <- c("homicide"     = "01A",
 cpd_crimes <- cpd_crimes_raw %>%
   clean_names() %>%
   select(-case_number, -iucr, -block, -beat, -district, -ward, -community_area, -year, -location, -updated_on) %>%
-  filter(!is.na(latitude) & domestic == FALSE) %>%
+  filter(!is.na(latitude) & domestic == FALSE &  !str_detect(description, "DOMESTIC")) %>%
   filter(fbi_code %in% nibrs_codes) %>%
   mutate(crime_type = invert(nibrs_codes)[fbi_code]) %>%
   mutate(crime_type = ifelse(crime_type %in% c("agg. assault", "agg. battery"), "assault_battery", crime_type)) %>%
-  mutate(gun_crime = ifelse(str_detect(description, "GUN"), 1, 0)) %>%
+  mutate(gun_crime = ifelse(str_detect(description, "GUN|FIREARM"), 1, 0)) %>%
   select(-domestic, -fbi_code) %>%
   mutate(date = lubridate::mdy_hms(date)) %>%
   st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
@@ -70,12 +70,13 @@ cpd_block_year_guns <- cpd_crimes %>%
   rename_with(~paste0(., "_gun"), -c(census_tract_6, census_block, year))
 
 cpd_gun_crimes_block <- valid_block_years %>%
-  left_join(cpd_block_year_guns) 
+  left_join(cpd_block_year_guns)
 
 cpd_crimes_block <- cpd_crimes_block_all %>%
   left_join(cpd_gun_crimes_block) %>%
   mutate(across(c(matches("gun")), ~ ifelse(is.na(.) & !is.na(homicide), 0, .))) %>%
-  rename_with(~paste0("CRIME_", .), -c(census_tract_6, census_block, year))
+  rename_with(~paste0("CRIME_", .), -c(census_tract_6, census_block, year)) %>%
+  mutate(CRIME_homicide_assault_battery_gun = CRIME_homicide + CRIME_assault_battery_gun)
 
 save(cpd_crimes_block, file = "./data/derived/cpd_crimes_block.RData")
 
@@ -98,6 +99,4 @@ cpd_crimes_nc <- cpd_crimes_tract %>%
 
 save(cpd_crimes_nc, file = "./data/derived/cpd_crimes_nc.RData")
 
-cpd_crimes_nc_2003 <- cpd_crimes_nc %>% filter(year==2003)
 
-save(cpd_crimes_nc_2003, file = "./data/derived/cpd_crimes_nc_2003.RData")

@@ -23,11 +23,7 @@ ccahs_block_sso_crime <- complete_crosswalk %>%
               summarize(across(matches("CRIME"), ~sum(.))) %>%
               rename_with(~ paste0(., "_2004_2006"), -c(census_tract_6, census_block))) %>%
   rename_with(~ paste0(., "_2001"), -c(matches("[0-9]$"), ccahs_nc, census_tract_6, census_block, ccahs_tract, n_sso_blocks)) %>%
-  inner_join(block_pop_estimates_2000 %>% # Some of the blocks here are combined in the SSO data
-               group_by(phdcn_nc, ccahs_nc, census_tract_6, census_block, ccahs_tract) %>%
-               summarize(area_block = sum(area_block), 
-                         population_block = sum(population_block),
-                         density_block = population_block / area_block))
+  inner_join(block_pop_estimates_2000)
 
 ccahs_block_sso_crime %>% list_missing()
 

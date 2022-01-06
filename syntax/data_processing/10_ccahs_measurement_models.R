@@ -61,7 +61,7 @@ measure_formula_2fac <- "
 
 ccahs_1fac_sem <- sem(measure_formula_1fac, data = ccahs_individual_wide , missing = "available.cases", estimator = "PML", std.lv = TRUE)
 ccahs_2fac_sem <- sem(measure_formula_2fac, data = ccahs_individual_wide , missing = "available.cases", estimator = "PML", std.lv = TRUE)
-anova(ccahs_1fac_sem, ccahs_2fac_sem) # 4 factor definitely preferred
+anova(ccahs_1fac_sem, ccahs_2fac_sem) # 2 factor definitely preferred
 
 
 scores_1fac <- lavPredict(ccahs_1fac_sem,  method = "ML", type = "lv")

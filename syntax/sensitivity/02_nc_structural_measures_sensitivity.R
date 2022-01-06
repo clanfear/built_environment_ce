@@ -82,12 +82,8 @@ x_notin_y(names(ltdb_1990), names(ltdb_2000))
 ltdb_il <- bind_rows(ltdb_1990, ltdb_2000) %>%
   filter(str_sub(trtid, 1, 5)=="17031") %>%
   mutate(census_tract_6 = str_sub(trtid, 6, -1)) %>%
-  inner_join(nc_tracts)
-
-ltdb_il_nc <- ltdb_il %>%
-  select(-trtid, -census_tract_6) %>%
-  group_by(ccahs_nc, phdcn_nc, year) %>%
-  summarize(across(everything(), ~sum(.)), .groups = "drop") %>% 
+  inner_join(nc_tracts) %>%
+  select(-trtid) %>%
   rename(
     d_POP              = pop,
     n_POP_black        = nhblk,
@@ -126,76 +122,24 @@ ltdb_il_nc <- ltdb_il %>%
     perc_moved        = n_HU_moved10yrs/d_HU_occupied_sp,
     population_ltdb_nc   = d_POP
   ) %>%
-  select(-matches("^(d_|n_)")) %>%
-  left_join(nc_areas) %>%
-  mutate(density_ltdb_nc = population_ltdb_nc / area_nc)
+  select(-matches("^(d_|n_)"))
 
-save(ltdb_il_nc, file = "./data/derived/ltdb_il_nc.RData")
 # ten Berge scores from alpha scoring oblimin factor analysis
   
-ltdb_factors <- ltdb_il_nc %>% 
-  select(-ccahs_nc, -phdcn_nc, -year, -perc_edcollege, -perc_edhighschool, -perc_professional, -population_ltdb_nc, -density_ltdb_nc, -area_nc) %>% 
-  psych::fa(nfactors = 3,  scores="tenBerge", rotate="oblimin", fm="alpha") %>%
+ltdb_factors_tract <- ltdb_il %>% 
+  select(-ccahs_nc, -phdcn_nc, -census_tract_6, -year, -perc_edcollege, -perc_edhighschool, -perc_professional) %>% 
+  psych::fa(nfactors = 3,  scores="tenBerge", rotate="oblimin") %>%
   {.$scores} %>%
-  cbind(select(ltdb_il_nc, ccahs_nc, phdcn_nc, year, population_ltdb_nc, density_ltdb_nc), .) %>%
-  rename(FAC_disadv = alpha1,
-         FAC_stability = alpha2,
-         FAC_hispimm = alpha3)
+  cbind(select(ltdb_il, ccahs_nc, phdcn_nc, year, census_tract_6), .) %>%
+  rename(FAC_disadv    = MR1,
+         FAC_stability = MR2,
+         FAC_hispimm   = MR3)
 
-ltdb_factors_wide <- ltdb_factors %>%
+ltdb_factors_tract_wide <- ltdb_factors_tract %>%
   mutate(across(matches("^FAC_"), ~ standardize(., 2))) %>%
-  pivot_longer(c(FAC_disadv, FAC_hispimm, FAC_stability, population_ltdb_nc, density_ltdb_nc)) %>%
-  mutate(name = paste(name, year, sep = "_")) %>%
+  pivot_longer(c(FAC_disadv, FAC_hispimm, FAC_stability)) %>%
+  mutate(name = paste(name, "tract", year, sep = "_")) %>%
   select(-year) %>%
   pivot_wider(names_from = name, values_from = value)
 
-save(ltdb_factors_wide, file = "./data/derived/ltdb_factors_wide.RData")
-
-# These are just notes on factor loadings across different measures in SR&E1997
-# and the CCAHS for purposes of comparison.
-
-# SR&E 1997
-# CONCENTRATED DISADVANTAGE
-# Below poverty line 0.93
-# On public assistance 0.94 <- can't get this one in LTDB
-# Female-headed families 0.93
-# Unemployed 0.86
-# Less than age 18 0.94
-# Black 0.60
-
-# IMMIGRANT CONCENTRATION
-# Latino 0.88
-# Foreign-born 0.70
-
-# RESIDENTIAL STABILITY
-# Same house as in 1985 0.77
-# Owner-occupied house 0.86
-
-# CCAHS
-# DISADVANTAGE
-# %Families with Income Less Than $10k 0.91 -0.24 -0.21 0.00
-# %Families with Income $50k or Higher -0.83 0.45 -0.02 0.07
-# %Families in Poverty 0.86 -0.37 -0.19 -0.15
-# %Families on Public Assistance 0.75 -0.40 -0.41 -0.09
-# %Unemployed in Civilian Labor Force 0.67 -0.41 -0.47 -0.07
-# %Families Female Headed 0.71 -0.34 -0.57 -0.07
-# %Never Married 0.61 0.25 -0.39 -0.55
-# %Less than 12 years of education 0.40 -0.73 0.38 -0.26
-
-# AFFLUENCE
-# %16 or more years of education -0.26 0.93 0.00 -0.10
-# %Professional/Managerial Occupation -0.23 0.92 -0.15 0.02
-
-# HISP/IMMIG
-# %Non-Hispanic Black 0.43 -0.26 -0.79 0.11
-# %Hispanic -0.14 -0.34 0.77 -0.39
-# %Foreign Born -0.16 -0.04 0.91 -0.07
-
-# Older Age Comp
-# %Homes Owner Occupied -0.81 -0.21 -0.17 0.36
-# %In Same Residence in 1995 -0.20 -0.65 -0.41 0.41
-# %0-17 Years Old 0.39 -0.85 -0.16 -0.18
-# %18-29 Years Old 0.04 0.51 0.30 -0.71
-# %30-39 Years Old -0.17 0.72 0.31 -0.38
-# %50-69 Years Old -0.38 0.08 -0.38 0.70
-# %70+ Years Old -0.15 0.20 -0.03 0.87
+save(ltdb_factors_tract_wide, file = "./data/derived/sensitivity/ltdb_factors_tract_wide.RData")

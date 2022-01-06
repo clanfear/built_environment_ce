@@ -12,6 +12,8 @@ load("./data/derived/il_block.RData")
 load("./data/derived/crosswalks/complete_crosswalk.RData")
 streets <- read_sf("./data/raw/street_center_lines/geo_export_41863fb2-af38-4010-8784-f90261f0dde0.shp")
 
+
+
 block_shape_pop <- tigris::blocks("IL", "Cook", year = 2000, class = "sf", refresh=TRUE) %>% 
   mutate(tract_block = str_sub(BLKIDFP00, -10, -1)) %>% 
   inner_join(block_pops) %>% 
@@ -24,13 +26,52 @@ blocks_1990 <- il_block %>%
   mutate(tract_block = paste0(TRACT, BLOCK)) %>%
   st_make_valid()
 
-block_shape_pop <- get_decennial("block", state = "IL", county = "Cook",
-              year = 2000,
-              variables = c("P001001"),
-              output = "wide", geometry=TRUE) %>% 
-  mutate(tract_block = str_sub(GEOID, -10, -1)) %>%
-  rename(population = P001001) %>% 
-  st_transform(3435)
+#  census_vars_sf1 <- tidycensus::load_variables(2000, "sf1")
+#  census_vars_sf3 <- tidycensus::load_variables(2000, "sf3")
+
+# perc_black        = P003004/P003001,
+# perc_hisp         = P004002/P004001,
+# perc_under18      = (P012003 + P012004 + P012005 + P012006 + P012027 + P012028 + P012029 + P012030)/P012001),
+# perc_owned        = H004002/H004001,
+# perc_fhh          = P034015/P034001,
+# perc_foreign      = P021013/P021001,
+# 
+# perc_edhighschool = (P148A005 + P148A013)/P148A001,
+# perc_edcollege    = (P148A008 + P148A016)/P148A001,
+# perc_unemployed   = (P043007 + P043014)/P043001,
+# perc_professional = (P050050 + P050003)/P050001,
+# perc_poverty      = P087002/P087001,
+# perc_moved        = (H038003 + H038004 + H038005 + H038010 + H038011 + H038012)/H038001
+# 
+# vars_sf1 <- c("P003004", "P003001",
+#           "P004002", "P004001",
+#           "P012003", "P012004", "P012005", "P012006", "P012027", "P012028", "P012029", "P012030", "P012001",
+#           "H004002", "H004001",
+#           "P034015", "P034001",
+#           "P021013", "P021001")
+# 
+# vars_sf3 <- c(
+#           "P021013", "P021001",
+#           "P148A005", "P148A013", "P148A001",
+#           "P148A008", "P148A016", "P148A001",
+#           "P043007", "P043014", "P043001",
+#           "P050050", "P050003", "P050001",
+#           "P087002", "P087001",
+#           "H038003", "H038004", "H038005", "H038010",  "H038011",  "H038012", "H038001")
+# 
+# block_shape_pop <- get_decennial("block", state = "IL", county = "Cook",
+#               year = 2000,
+#               variables = c(c("P001001"), vars_sf1),
+#               output = "wide", geometry=TRUE) %>% 
+#   mutate(tract_block = str_sub(GEOID, -10, -1)) %>%
+#   rename(population = P001001) %>% 
+#   st_transform(3435)
+# 
+# block_sf3 <- get_decennial("block", state = "IL", county = "Cook",
+#                                  year = 2000,
+#                                  variables = vars_sf3[c(1:2, 17:23)],
+#                                  output = "wide", geometry=FALSE) %>% 
+#   mutate(tract_block = str_sub(GEOID, -10, -1))
 
 blocks_1990_interpolated_sum <- aw_interpolate(blocks_1990, 
                                                tid = tract_block, 

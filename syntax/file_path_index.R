@@ -3,8 +3,10 @@
 # locations with the same names, the project is a one-push reproduction using
 # 00_build_shared_data.R
 
+# External data drive
+ext_drive <- "G:/"
 # Secure data directory. Typically an external drive.
-secure_data_dir <- "F:/SecureData/"
+secure_data_dir <- paste0(ext_drive, "SecureData/")
 
 # "F:/SecureData/Matsueda-tract_linknc.sav" is the PHDCN / CCAHS / tract crosswalk from ICPSR
 icpsr_tract_crosswalk_path <- paste0(secure_data_dir, "Matsueda-tract_linknc.sav")
@@ -29,7 +31,8 @@ phdcn_cs_nc_path <- paste0(secure_data_dir, "da02766-0002_Matsueda_02062019.sav"
 
 # LTDB
 # Not a contract-agreed secure dataset, so not in SecureData
-ltdb_dir <- "F:/LTDB/ltdb_interpolate_stata/"
+ltdb_dir <- paste0(ext_drive, "LTDB/ltdb_interpolate_stata/")
+
 # "F:/LTDB/ltdb_interpolate_stata/std_1990_fullcount_cw2000.dta" is the standard 1990 fullcount LTDB interpolated to 2000 tracts using their Stata script file
 ltdb_1990_fullcount_path <- paste0(ltdb_dir, "std_1990_fullcount_cw2000.dta")
 
@@ -48,5 +51,5 @@ il_block_1990_path <- "./data/raw/blocks_1990/IL_block_1990.shp"
 
 
 
-# "D:/Projects/dissertation_data/chicago/chicago_police_data/Crimes_-_2001_to_Present.csv" is a 1.6 gig 2001+ Chicago PD crime data file from Chicago's open data portal
-cpd_data_path <- "D:/Projects/dissertation_data/chicago/chicago_police_data/Crimes_-_2001_to_Present.csv"
+# "F:/chicago_police_data/Crimes_-_2001_to_Present.csv" is a 1.6 gig 2001+ Chicago PD crime data file from Chicago's open data portal
+cpd_data_path <- paste0(ext_drive, "chicago_police_data/Crimes_-_2001_to_Present.csv")

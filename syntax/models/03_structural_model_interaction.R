@@ -4,8 +4,7 @@ library(piecewiseSEM)
 source("./syntax/project_functions.R")
 load("./data/analytical_data/ccahs_block_analytical.RData")
 
-dvs <- c("CRIME_homicide_2004_2006",
-         "CRIME_assault_battery_gun_2004_2006",
+dvs <- c("CRIME_homicide_assault_battery_gun_2004_2006",
          "CRIME_robbery_2004_2006",
          "CRIME_violent_2004_2006",
          "CRIME_property_2004_2006")
@@ -14,7 +13,8 @@ ce_2001 <- "CE_hlm_2001"
 ivs_nc <- c("FAC_disadv_2000",
             "FAC_stability_2000", 
             "FAC_hispimm_2000", 
-            "density_ltdb_nc_2000")
+            "density_ltdb_nc_2000",
+            "street_class_near")
 be_block <- c("BE_pr_bar_onstreet_block_2001",
               "BE_pr_liquor_onstreet_block_2001",
               "BE_pr_vacant_onstreet_block_2001",
@@ -41,12 +41,13 @@ main_hlm_formulas_nobe_nore       <- str_remove(main_hlm_formulas_nobe, " \\+ \\
 ce_2000_formula         <- paste0(ce_2001, " ~ ", paste(c(ce_1995, ivs_nc, be_block, density_block), collapse = " + "))
 be_formulas             <- paste0(be_block, " ~ ", paste(c(ce_1995, ivs_nc, density_block, res), collapse = " + "))
 
+# No reason to estimate full structural model just to get the interactions; gets cranky with convergence unless you really increase iterations.
+
 psem_hlm_int_list <- psem(
-  MASS::glm.nb(formula(int_hlm_formulas_nore[1]), data = ccahs_block_analytical),
+  glmer.nb(formula(int_hlm_formulas[1]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
   glmer.nb(formula(int_hlm_formulas[2]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
   glmer.nb(formula(int_hlm_formulas[3]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
   glmer.nb(formula(int_hlm_formulas[4]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
-  glmer.nb(formula(int_hlm_formulas[5]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
   lm(formula(ce_2000_formula),  data = ccahs_block_analytical),
   lmer(formula(be_formulas[1]), data = ccahs_block_analytical),
   lmer(formula(be_formulas[2]), data = ccahs_block_analytical),
@@ -85,14 +86,10 @@ psem_hlm_int_list <- psem(
   BE_pr_recreation_block_2001               %~~% BE_pr_parking_block_2001,
   BE_pr_recreation_block_2001               %~~% MIXED_LAND_USE_2001,
   BE_pr_parking_block_2001                  %~~% MIXED_LAND_USE_2001,
-  CRIME_assault_battery_gun_2004_2006       %~~% CRIME_homicide_2004_2006,
-  CRIME_robbery_2004_2006                   %~~% CRIME_homicide_2004_2006,
-  CRIME_violent_2004_2006                   %~~% CRIME_homicide_2004_2006,
-  CRIME_property_2004_2006                  %~~% CRIME_homicide_2004_2006,
-  CRIME_robbery_2004_2006                   %~~% CRIME_assault_battery_gun_2004_2006,
-  CRIME_violent_2004_2006                   %~~% CRIME_assault_battery_gun_2004_2006,
-  CRIME_property_2004_2006                  %~~% CRIME_assault_battery_gun_2004_2006,
+  CRIME_robbery_2004_2006                   %~~% CRIME_homicide_assault_battery_gun_2004_2006,
+  CRIME_violent_2004_2006                   %~~% CRIME_homicide_assault_battery_gun_2004_2006,
   CRIME_violent_2004_2006                   %~~% CRIME_robbery_2004_2006,
+  CRIME_property_2004_2006                  %~~% CRIME_homicide_assault_battery_gun_2004_2006,
   CRIME_property_2004_2006                  %~~% CRIME_robbery_2004_2006,
   CRIME_property_2004_2006                  %~~% CRIME_violent_2004_2006
 )
@@ -101,10 +98,9 @@ psem_hlm_int_list_summary <- summary(psem_hlm_int_list)
 save(psem_hlm_int_list_summary, file = "./output/psem_hlm_int_list_summary.RData")
 
 interaction_second_stage_list <- list(
-  "Homicide"    =   MASS::glm.nb(formula(int_hlm_formulas_nore[1]), data = ccahs_block_analytical),
-  "Gun Assault" =   glmer.nb(formula(int_hlm_formulas[2]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
-  "Robbery"     =   glmer.nb(formula(int_hlm_formulas[3]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
-  "Violent"     =   glmer.nb(formula(int_hlm_formulas[4]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
-  "Property"    =   glmer.nb(formula(int_hlm_formulas[5]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6)))
+  "Homicide/Gun Assault" =   glmer.nb(formula(int_hlm_formulas[1]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
+  "Robbery"     =   glmer.nb(formula(int_hlm_formulas[2]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
+  "Violent"     =   glmer.nb(formula(int_hlm_formulas[3]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
+  "Property"    =   glmer.nb(formula(int_hlm_formulas[4]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6)))
 )
 save(interaction_second_stage_list, file = "./output/interaction_second_stage_list.RData")

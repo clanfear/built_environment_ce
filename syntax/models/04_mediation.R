@@ -19,9 +19,10 @@ be_crime_effects %>% left_join(ce_be_effects) %>%
   group_by(Response) %>%
   summarize(mediated_effect = exp(sum(mediated_effect))-1)
 
-# CE effects mediated via only abandoned buildings and mixed land use
+# CE effects mediated via only abandoned buildings
 be_crime_effects %>% left_join(ce_be_effects) %>%
   mutate(mediated_effect = stage1estimate * stage2estimate) %>%
-  filter(BE == "BE_pr_abandoned_bld_onstreet_block_2001" | BE == "MIXED_LAND_USE_2001") %>%
+  filter(BE == "BE_pr_abandoned_bld_onstreet_block_2001") %>%
   group_by(Response) %>%
   summarize(mediated_effect = exp(sum(mediated_effect))-1)
+

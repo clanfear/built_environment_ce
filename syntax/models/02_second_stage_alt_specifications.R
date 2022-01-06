@@ -4,8 +4,7 @@ library(piecewiseSEM)
 source("./syntax/project_functions.R")
 load("./data/analytical_data/ccahs_block_analytical.RData")
 
-dvs <- c("CRIME_homicide_2004_2006",
-         "CRIME_assault_battery_gun_2004_2006",
+dvs <- c("CRIME_homicide_assault_battery_gun_2004_2006",
          "CRIME_robbery_2004_2006",
          "CRIME_violent_2004_2006",
          "CRIME_property_2004_2006")
@@ -14,7 +13,8 @@ ce_2001 <- "CE_hlm_2001"
 ivs_nc <- c("FAC_disadv_2000",
             "FAC_stability_2000", 
             "FAC_hispimm_2000", 
-            "density_ltdb_nc_2000")
+            "density_ltdb_nc_2000",
+            "street_class_near")
 be_block <- c("BE_pr_bar_onstreet_block_2001",
               "BE_pr_liquor_onstreet_block_2001",
               "BE_pr_vacant_onstreet_block_2001",
@@ -38,11 +38,10 @@ main_hlm_formulas_nobe            <- paste0(dvs, " ~ ", paste(c(ce_2001, ivs_nc,
 main_hlm_formulas_nobe_nore       <- str_remove(main_hlm_formulas_nobe, " \\+ \\(1\\|ccahs_nc\\)")
 
 base_second_stage_nobe_list <- list(
-  "Homicide"    = MASS::glm.nb(formula(main_hlm_formulas_nobe_nore[1]), data = ccahs_block_analytical),
-  "Gun Assault" = glmer.nb(formula(main_hlm_formulas_nobe[2]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
-  "Robbery"     = glmer.nb(formula(main_hlm_formulas_nobe[3]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
-  "Violent"     = glmer.nb(formula(main_hlm_formulas_nobe[4]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
-  "Property"    = glmer.nb(formula(main_hlm_formulas_nobe[5]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6)))
+  "Homicide/Gun Assault" = glmer.nb(formula(main_hlm_formulas_nobe[1]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
+  "Robbery"     = glmer.nb(formula(main_hlm_formulas_nobe[2]), data = ccahs_block_analytical, control = glmerControl(optimizer="nlminbwrap", optCtrl=list(maxfun=2e7))),
+  "Violent"     = glmer.nb(formula(main_hlm_formulas_nobe[3]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
+  "Property"    = glmer.nb(formula(main_hlm_formulas_nobe[4]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6)))
 )
 save(base_second_stage_nobe_list, file = "./output/base_second_stage_nobe_list.RData")
 
@@ -50,10 +49,9 @@ main_hlm_formulas_polydis         <- paste0(dvs, " ~ ", paste(c(ce_2001, ivs_nc,
 main_hlm_formulas_polydis_nore       <- str_remove(main_hlm_formulas_polydis, " \\+ \\(1\\|ccahs_nc\\)")
 
 base_second_stage_polydis_list <- list(
-  "Homicide"    = MASS::glm.nb(formula(main_hlm_formulas_polydis_nore[1]), data = ccahs_block_analytical),
-  "Gun Assault" = glmer.nb(formula(main_hlm_formulas_polydis[2]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
-  "Robbery"     = glmer.nb(formula(main_hlm_formulas_polydis[3]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
-  "Violent"     = glmer.nb(formula(main_hlm_formulas_polydis[4]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
-  "Property"    = glmer.nb(formula(main_hlm_formulas_polydis[5]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6)))
+  "Homicide/Gun Assault" = glmer.nb(formula(main_hlm_formulas_polydis[1]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
+  "Robbery"     = glmer.nb(formula(main_hlm_formulas_polydis[2]), data = ccahs_block_analytical, control = glmerControl(optimizer="nlminbwrap", optCtrl=list(maxfun=2e7))),
+  "Violent"     = glmer.nb(formula(main_hlm_formulas_polydis[3]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6))),
+  "Property"    = glmer.nb(formula(main_hlm_formulas_polydis[4]), data = ccahs_block_analytical, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=2e6)))
 )
 save(base_second_stage_polydis_list, file = "./output/base_second_stage_polydis_list.RData")

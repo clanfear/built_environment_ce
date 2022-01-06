@@ -3,10 +3,11 @@
 # scales to make sure they're all correlated the same. That isn't important for
 # SEM/CFA but it is vital for the hierarchical measurement models.
 
-secure_data_dir <- "F:/SecureData/"
+
 
 library(tidyverse)
 source("./syntax/project_functions.R")
+source("./syntax/file_path_index.R")
 
 phdcn_cs_individual_raw <- haven::read_sav(phdcn_indiv_path)
 
@@ -103,7 +104,7 @@ phdcn_cs_individual <- phdcn_cs_individual_raw %>%
     ) %>%
   mutate(across(matches("^(COHTR_|INF_|PE_|LC_)"), ~ (.*-1)+6),
          across(matches("^(AT|TE)"), ~ (.*-1)+5)) %>%
-  filter(across(c(FEMALE, FAM_married, FAM_sep_div, FAM_single, HOMEOWN, 
+  filter(across(c(NC_ID, FEMALE, FAM_married, FAM_sep_div, FAM_single, HOMEOWN, 
                   RACE_latino, RACE_black, MOBILITY, AGE, YRS_IN_NEIGHB, SES), ~ !is.na(.)))
 
 
