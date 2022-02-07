@@ -13,12 +13,12 @@ This repository contains the data and code for the article:
 Please cite this compendium as:
 
 > Lanfear, Charles C. (2022). *Repository of R code and data for
-> ‘Collective Efficacy the Built Environment’*. Accessed 06 Jan 2022.
+> ‘Collective Efficacy the Built Environment’*. Accessed 07 Feb 2022.
 
 ### How to download
 
 You can download the compendium as a zip from from this URL:
-</archive/master.zip>
+[/archive/master.zip](https://github.com/clanfear/built_environment_ce/archive/master.zip)
 
 ### Structure:
 
