@@ -5,8 +5,7 @@
 
 This repository contains the data and code for the article:
 
-> Lanfear, Charles C. (2022). Collective Efficacy and the Built
-> Environment. *Criminology*, 60(2)
+> [Lanfear, Charles C. (2022). Collective Efficacy and the Built Environment. *Criminology*, 60(2)](https://doi.org/10.1111/1745-9125.12304)
 
 ### How to cite
 
